@@ -8,20 +8,20 @@ primes = []
 not_primes = []
 
 
-for i in range(1, len(numbers)):
+for i in numbers:
 
     is_prime = True
-    for j in range(1, len(numbers)):
-        if numbers[i] % numbers[j] == 0 and numbers[i] != numbers[j]:
+    for j in numbers:
+        if i % j == 0 and i != j and i != 1 and j != 1:
             is_prime = False
             break
         else:
             is_prime = True
 
     if is_prime == True:
-        primes.append(numbers[i])
+        primes.append(i)
     else:
-        not_primes.append(numbers[i])
+        not_primes.append(i)
 
 print("Список простых чисел: ", primes)
 print("Список составных чисел: ", not_primes)
