@@ -1,7 +1,8 @@
-first = 12
-second = 8
-third = 12
+first = input("Введите первое число - ")
+second = input("Введите второе число - ")
+third = input("Введите третье число - ")
 
+print("\n""Число совпадений:")
 if first != second and second != third and first != third:
     print(0)
 elif first == second == third:
