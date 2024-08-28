@@ -13,7 +13,7 @@ for i in range(n - 2):
         multiple.append(first_stone[i])
 
 for first_digit in range(1, (n + 1)//2):
-    for second_digit in range(2, 18):
+    for second_digit in range(2, n):
         if first_digit == second_digit:
             continue
         else:
