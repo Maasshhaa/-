@@ -2,18 +2,17 @@
 def absolute_sum(data_structure, list_sum = []):
     for i in data_structure:
         type_now = type(i)
-        if type_now == list or type_now == tuple:
+        if type_now == int:
+            list_sum.append(i)
+        if type_now == str:
+            list_sum.append(len(i))
+            
+        if type_now == list or type_now == tuple or type_now == set:
             list_sum += list(i)
         if type_now == dict:
             list_sum += list(i.keys())
             list_sum += list(i.values())
-        if type_now == str:
-            list_sum.append(len(i))
-        if type_now == set:
-            i = list(*i)
-            list_sum += i
-        if type_now == int:
-            list_sum.append(i)
+
     if all(isinstance(i, int) for i in list_sum):
         print(sum(list_sum))
     else:
@@ -29,4 +28,3 @@ data_structure2 = [[1, 1, {'ddd': 1}], 'sdwaoo', [{(1, 1, (3))}]]
 print(f'данная структура: {data_structure2}')
 print('Cумма всех чисел и длин всех строк:'),
 absolute_sum(data_structure2, list_sum=[])
-
