@@ -23,7 +23,7 @@ filenames = [f'./file {number}.txt' for number in range(1, 5)]
 
 if __name__ == '__main__':
     stared_at = time.time()
-    with Pool() as pool:
+    with Pool(processes=4) as pool:
         results = pool.map(read_info, filenames)
     ended_at = time.time()
     elapsed = ended_at - stared_at
