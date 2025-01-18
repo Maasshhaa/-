@@ -32,17 +32,19 @@ def get_all_products(i):
 
 # добавляет нового юзера
 def add_user(username, email, age, balance):
-    if is_included(username):
-        cursor.execute("INSERT INTO Users (username, email, age, balance) VALUES(?, ?, ?, ?)",
+    cursor.execute("INSERT INTO Users (username, email, age, balance) VALUES(?, ?, ?, ?)",
                        (username, email, age, balance))
-        connection.commit()
+    connection.commit()
 
 
 # проверка на существование никнейма
 def is_included(username):
     check_user = cursor.execute("SELECT * FROM Users WHERE username=?", (username,))
     connection.commit()
-    return check_user
+    if not list(check_user):
+        return False
+    else:
+        return True
 
 
 connection.commit()
