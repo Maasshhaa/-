@@ -21,4 +21,3 @@ def get_all_products(i):
 
 
 connection.commit()
-connection.close()
