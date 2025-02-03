@@ -9,15 +9,21 @@ from typing import Annotated
 from app.routers.schemas import CreateUser, UpdateUser
 from sqlalchemy import select, insert, update, delete
 from slugify import slugify
+from app.models.task import Task
+
 
 router = APIRouter(prefix="/user", tags=["user"])
 
 
 # Получить всех пользователей
 @router.get("/")
-async def all_users(db: Annotated[Session, Depends(get_db)]):
-    result = db.scalars(select(User)).all()
-    return result
+async def tasks_by_user_id(user_id: int, db: Annotated[Session, Depends(get_db)]):
+    user = db.scalar(select(User).where(User.id == user_id))
+    if not user:
+        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="User was not found")
+
+    tasks = db.scalars(select(Task).where(Task.user_id == user_id)).all()
+    return tasks
 
 
 # Получить пользователя по ID
@@ -65,13 +71,16 @@ async def update_user(user_id: int, user: UpdateUser, db: Annotated[Session, Dep
 # Удалить пользователя
 @router.delete("/delete/{user_id}")
 async def delete_user(user_id: int, db: Annotated[Session, Depends(get_db)]):
-    existing_user = db.scalar(select(User).where(User.id == user_id))
-    if not existing_user:
+    user = db.scalar(select(User).where(User.id == user_id))
+    if not user:
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="User was not found")
 
+    # Удаляем связанные задачи
+    db.execute(delete(Task).where(Task.user_id == user_id))
+    # Удаляем пользователя
     db.execute(delete(User).where(User.id == user_id))
     db.commit()
-    return {"status_code": status.HTTP_200_OK, "transaction": "User deleted successfully!"}
+    return {"status_code": status.HTTP_200_OK, "transaction": "User and related tasks deleted successfully!"}
 
 
 class User(Base):
